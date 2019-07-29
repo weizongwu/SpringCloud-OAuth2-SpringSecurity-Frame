@@ -1,0 +1,17 @@
+#port 端口 host 地址 serviceName 注册名称 register：是否注册到consul 默认为false
+spring:
+  cloud:
+    consul:
+      port: 8500
+      host: localhost
+      discovery:
+        serviceName: auth
+        locator:
+          lower-case-service-id: true
+          enabled: true
+        register: true
+        prefer-ip-address: true #这个必须配
+        tags: version=1.0
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}
+        healthCheckInterval: 15s
+        health-check-url: http://${spring.cloud.client.ip-address}:${server.port}/actuator/health
