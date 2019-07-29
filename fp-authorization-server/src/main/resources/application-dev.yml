@@ -1,0 +1,55 @@
+#Tomcat 设置最大线程，最小备用线程，端口，请求地址  localhost:8002
+server:
+  tomcat:
+    max-threads: 100
+    min-spare-threads: 10
+  port: 8003
+#遇到相同名字是否允许覆盖注册
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: SpringCloud-consul-authorization-server
+  #数据库配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/frame-permission?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: wwzroot
+    type: com.alibaba.druid.pool.DruidDataSource
+    #连接池的补充设置
+    druid:
+      minIdle: 5
+      minEvictableIdleTimeMillis: 300000
+      timeBetweenEvictionRunsMillis: 60000
+      initialSize: 5
+      maxWait: 60000
+      maxActive: 20
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      filters: stat,wall,log4j
+      poolPreparedStatements: true
+
+  #redis服务器地址配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+#mybatis配置
+mybatis:
+  configuration:
+    cache-enabled: true
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: true
+    jdbc-type-for-null: NULL
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+  type-aliases-package: com.wwz.frame.entity
+
+
+
+
+

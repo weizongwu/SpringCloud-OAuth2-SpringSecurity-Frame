@@ -1,0 +1,12 @@
+#Tomcat 设置最大线程，最小备用线程，端口，请求地址  localhost:8001
+server:
+  tomcat:
+    max-threads: 100
+    min-spare-threads: 10
+  port: 8001
+#遇到相同名字是否允许覆盖注册
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: SpringCloud-consul-gateway
