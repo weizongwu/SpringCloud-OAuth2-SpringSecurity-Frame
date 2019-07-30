@@ -1,5 +1,7 @@
 package com.wwz.frame.config;
 
+import com.wwz.frame.exception.MyOAuth2WebResponseExceptionTranslator;
+import com.wwz.frame.filter.ClientDetailsAuthenticationFilter;
 import com.wwz.frame.service.MyClientDetailsService;
 import com.wwz.frame.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,12 @@ public class MySecurityOAuth2Config extends AuthorizationServerConfigurerAdapter
 
     @Autowired
     private MyClientDetailsService clientDetailsService; // 自定义客户端数据
+    @Autowired
+    private ClientDetailsAuthenticationFilter clientDetailsAuthenticationFilter; // 客户端认证之前的过滤器
+
+    @Autowired
+    private MyOAuth2WebResponseExceptionTranslator webResponseExceptionTranslator; // 自定义返回异常格式
+
     // 加密方式
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -63,6 +71,10 @@ public class MySecurityOAuth2Config extends AuthorizationServerConfigurerAdapter
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+        // 加载client的 获取接口
+        clientDetailsAuthenticationFilter.setClientDetailsService(clientDetailsService);
+        // 客户端认证之前的过滤器
+        oauthServer.addTokenEndpointAuthenticationFilter(clientDetailsAuthenticationFilter);
         oauthServer
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
@@ -97,8 +109,8 @@ public class MySecurityOAuth2Config extends AuthorizationServerConfigurerAdapter
                 .tokenStore(tokenStore())  // 配置token存储
                 .userDetailsService(userDetailsService)  // 配置自定义的用户权限数据，不配置会导致token无法刷新
                 .authenticationManager(authenticationManager)
-                .tokenServices(defaultTokenServices());      // 加载token配置
-
+                .tokenServices(defaultTokenServices())// 加载token配置
+                .exceptionTranslator(webResponseExceptionTranslator);  // 自定义异常返回
     }
 
     /**
