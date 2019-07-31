@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
@@ -125,9 +126,14 @@ public class MySecurityOAuth2Config extends AuthorizationServerConfigurerAdapter
         DefaultTokenServices tokenServices = new DefaultTokenServices();
         tokenServices.setTokenStore(tokenStore());
         tokenServices.setSupportRefreshToken(true);
+        tokenServices.setTokenEnhancer(tokenEnhancer());    // token自定义
         tokenServices.setClientDetailsService(clientDetailsService);
         tokenServices.setAccessTokenValiditySeconds(60 * 60 * 12);  // token有效期自定义设置，默认12小时
         tokenServices.setRefreshTokenValiditySeconds(60 * 60 * 24 * 7);  // refresh_token默认30天
         return tokenServices;
+    }
+    @Bean
+    public TokenEnhancer tokenEnhancer() {
+        return new MyTokenEnhancer();
     }
 }

@@ -127,10 +127,32 @@
          public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
              resources.authenticationEntryPoint(tokenExceptionEntryPoint); // token失效处理器
              resources.resourceId("auth"); // 设置资源id  通过client的 scope 来判断是否具有资源权限
-         }
-           
+         }       
+   5、自定义token返回信息
+  
+   默认的token返回格式：
+  
+          {
+              "access_token": "1e93bc23-32c8-428f-a126-8206265e17b2",
+              "token_type": "bearer",
+              "refresh_token": "0f083e06-be1b-411f-98b0-72be8f1da8af",
+              "expires_in": 3599,
+              "scope": "auth api"
+          }     
+   我们期望自定义，例如加上username等：
+   
+        {
+              "access_token": "1e93bc23-32c8-428f-a126-8206265e17b2",
+              "token_type": "bearer",
+              "refresh_token": "0f083e06-be1b-411f-98b0-72be8f1da8af",
+              "expires_in": 3599,
+              "scope": "auth api",
+              "username":"username"
+        }            
         
-        
+   新建自定义token返回MyTokenEnhancer实现TokenEnhancer接口
+   在认证服务的defaultTokenServices()中添加MyTokenEnhancer。需要注意的是：
+   如果已经生成了一次没有自定义的token信息，需要去redis里删除掉该token才能再次测试结果，不然你的结果一直是错误的，因为token还没过期的话，是不会重新生成的。
         
         
         
