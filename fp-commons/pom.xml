@@ -11,7 +11,7 @@
     <groupId>com.wwz.frame</groupId>
     <artifactId>fp-commons</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>commons</name>
+    <name>fp-commons</name>
     <packaging>jar</packaging>
     <description>公用类项目</description>
 

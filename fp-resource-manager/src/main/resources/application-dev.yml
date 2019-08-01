@@ -1,0 +1,17 @@
+#Tomcat 设置最大线程，最小备用线程，端口，请求地址  localhost:8004
+server:
+  tomcat:
+    max-threads: 100
+    min-spare-threads: 10
+  port: 8004
+#遇到相同名字是否允许覆盖注册
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: SpringCloud-consul-authorization-manager
+  #redis服务器地址配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+

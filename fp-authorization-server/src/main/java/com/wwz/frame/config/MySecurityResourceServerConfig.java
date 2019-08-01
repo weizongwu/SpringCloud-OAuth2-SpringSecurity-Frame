@@ -50,6 +50,6 @@ public class MySecurityResourceServerConfig extends ResourceServerConfigurerAdap
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.authenticationEntryPoint(tokenExceptionEntryPoint); // token失效处理器
-        resources.resourceId("auth"); // 设置资源id  通过client的 scope 来判断是否具有资源权限
+        resources.resourceId("auth"); // 设置资源id  通过client的 resource_ids 来判断是否具有资源权限
     }
 }

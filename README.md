@@ -153,7 +153,55 @@
    新建自定义token返回MyTokenEnhancer实现TokenEnhancer接口
    在认证服务的defaultTokenServices()中添加MyTokenEnhancer。需要注意的是：
    如果已经生成了一次没有自定义的token信息，需要去redis里删除掉该token才能再次测试结果，不然你的结果一直是错误的，因为token还没过期的话，是不会重新生成的。
+   
+   (4)fp-resource-manager  用户信息管理资源服务器
+      
+      pom.xml：OAuth2、redis等依赖
+      把认证服务器中的 资源配置相关复制到资源项目，稍作调整：
+      增加健康检查通过，
+      
+      增加redis注入（重点，不然会取不到token对比一直是token失效； 如果自定义过userDetails，记得把自定义实现的文件也复制一份到资源项目，不然redis反序列化会失败。）
+      到此可以使用token进行资源保护。
+      
+   6、根据请求URI拦截权限判断
+    一般我们通过@PreAuthorize("hasRole('ROLE_USER')") 注解，以及在HttpSecurity配置权限需求等来控制权限
+    在这里，我们基于请求的URI来控制访问权限，并且可以使用注解来控制权限访问。
+    首先 自定义一个权限认证MySecurityAccessDecisionManager 继承AccessDecisionManager接口，重写 decide方法，
+    并且复制默认权限验证AbstractAccessDecisionManager的剩余两个方法（实现注解控制的重点）。
+    用户具有的权限在认证服务器中已经自定义了。
+    
+            @Override
+            public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
+                String requestUrl = ((FilterInvocation) object).getRequest().getMethod() + ((FilterInvocation) object).getRequest().getRequestURI();
+        //        System.out.println("requestUrl>>" + requestUrl);
         
+                // 当前用户所具有的权限
+                Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        //        System.out.println("authorities=" + authorities);
+                for (GrantedAuthority grantedAuthority : authorities) {
+                    if (grantedAuthority.getAuthority().equals(requestUrl)) {
+                        return;
+                    }
+                    if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+                        return;
+                    }
+        
+                }
+                throw new AccessDeniedException("无访问权限");
+            }
+   这里通过判断匹配通过或者抛出无权异常来判断有无访问权限。
+   在资源服务器的资源配置中重写权限判断，加载我们自定义的权限判断
+   
+     .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {       // 重写做权限判断
+           @Override
+           public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                  o.setAccessDecisionManager(accessDecisionManager);      // 权限判断
+                  return o;
+           }
+       })
+       
+           
+       
         
         
        
