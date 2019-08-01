@@ -7,7 +7,6 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -27,20 +26,24 @@ public class MySecurityAccessDecisionManager implements AccessDecisionManager {
 
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
-        String requestUrl = ((FilterInvocation) object).getRequest().getMethod() + ((FilterInvocation) object).getRequest().getRequestURI();
-//        System.out.println("requestUrl>>" + requestUrl);
 
-        // 当前用户所具有的权限
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-//        System.out.println("authorities=" + authorities);
-        for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals(requestUrl)) {
-                return;
-            }
-            if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-                return;
-            }
+        System.out.println("collection>>" + configAttributes);
 
+        for (ConfigAttribute configAttribute : configAttributes) {
+            // 当前请求需要的权限
+            String needRole = configAttribute.getAttribute();
+            // 当前用户所具有的权限
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            System.out.println("authorities=" + authorities);
+            for (GrantedAuthority grantedAuthority : authorities) {
+                if (grantedAuthority.getAuthority().equals(needRole)) {
+                    return;
+                }
+                if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+                    return;
+                }
+
+            }
         }
         throw new AccessDeniedException("无访问权限");
     }

@@ -48,6 +48,9 @@ public class MySecurityResourceServerConfig extends ResourceServerConfigurerAdap
     @Resource
     private MySecurityAccessDecisionManager accessDecisionManager; //权限判断
 
+    @Resource
+    private MyFilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource; // 请求需要权限
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -64,6 +67,7 @@ public class MySecurityResourceServerConfig extends ResourceServerConfigurerAdap
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {       // 重写做权限判断
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                        o.setSecurityMetadataSource(filterInvocationSecurityMetadataSource); // 请求需要权限
                         o.setAccessDecisionManager(accessDecisionManager);      // 权限判断
                         return o;
                     }

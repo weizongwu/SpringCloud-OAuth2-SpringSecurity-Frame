@@ -199,7 +199,40 @@
                   return o;
            }
        })
+   6.1 优化6的权限判断
+   先增加一级获取uri然后判断uri需要什么权限，可以多个并且的权限 等等然后 在经过权限判断器进行拦截判断    
+   新建自定义的url权限判断MyFilterInvocationSecurityMetadataSource 实现FilterInvocationSecurityMetadataSource
+          private AntPathMatcher antPathMatcher = new AntPathMatcher(); // 模糊匹配 如何 auth/**   auth/auth
+        
+            @Override
+            public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
+                Set<ConfigAttribute> set = new HashSet<>();
+        
+                String requestUrl = ((FilterInvocation) object).getRequest().getMethod() + ((FilterInvocation) object).getRequest().getRequestURI();
+                System.out.println("requestUrl >> " + requestUrl);
+        
+                // 这里获取对比数据可以从数据库或者内存 redis等等地方获取 目前先写死后面优化
+                String url = "GET/auth/**";
+                if (antPathMatcher.match(url, requestUrl)) {
+                    SecurityConfig securityConfig = new SecurityConfig("ROLE_ADMIN");
+                    set.add(securityConfig);
+                }
+                if (ObjectUtils.isEmpty(set)) {
+                    return SecurityConfig.createList("ROLE_LOGIN");
+                }
+                return set;
+            }
+   修改原来的MySecurityAccessDecisionManager，从获取到url 改成获取到需要什么权限。其他判断不变
+       把MyFilterInvocationSecurityMetadataSource 注册到重写方法
        
+               .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {       // 重写做权限判断
+                       @Override
+                       public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                           o.setSecurityMetadataSource(filterInvocationSecurityMetadataSource); // 请求需要权限
+                           o.setAccessDecisionManager(accessDecisionManager);      // 权限判断
+                       return o;
+                    }
+               })
            
        
         
