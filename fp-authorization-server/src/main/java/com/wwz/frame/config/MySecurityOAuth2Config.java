@@ -106,6 +106,7 @@ public class MySecurityOAuth2Config extends AuthorizationServerConfigurerAdapter
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+//      endpoints.pathMapping("/oauth/token","/token/login");  设置token生成请求地址
         endpoints
                 .tokenStore(tokenStore())  // 配置token存储
                 .userDetailsService(userDetailsService)  // 配置自定义的用户权限数据，不配置会导致token无法刷新

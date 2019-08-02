@@ -234,7 +234,21 @@
                     }
                })
            
-       
+   7、登录登出自定义
         
-        
+   登出自定义：登出相当于使token失效，我们只需要携带access_token 请求 ConsumerTokenServices（默认自带的注销接口）即可，请求后旧的token即不可用。
+            
+            @DeleteMapping("/logout")
+            public ResponseVo logout(String accessToken) {
+                if (consumerTokenServices.revokeToken(accessToken)) {
+                    return new ResponseVo(200, "登出成功");
+                } else {
+                    return new ResponseVo(500, "登出失败");
+                }
+            }
+   登录自定义：默认的token请求地址是“oauth/token”,我们可以在认证服务配置的 AuthorizationServerEndpointsConfigurer配置中自定义的请求地址。
+   我们还可以封装一层自己的请求，然后在请求token之前做一些自己的处理。我这里使用了获取需要请求token的信息，然后在java端使用RestTemplate来调用生成token地址
+   的方式来获取token，我可以在调用之前做一些其他处理，如验证码校验等等。
+   具体看TokenController文件。
+         
        

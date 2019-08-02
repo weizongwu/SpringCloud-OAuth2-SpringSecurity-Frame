@@ -47,10 +47,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 // 匹配oauth相关，匹配健康，匹配默认登录登出 在httpSecurity处理，，其他到ResourceServerConfigurerAdapter OAuth2处理  1
-                .requestMatchers().antMatchers("/oauth/**", "/actuator/health", "/login", "/logout")
+                .requestMatchers().antMatchers("/oauth/**", "/actuator/health", "/client/login", "/client/logout")
                 .and()
                 // 匹配的全部无条件通过 permitAll 2
-                .authorizeRequests().antMatchers("/oauth/**", "/actuator/health", "/login", "/logout").permitAll()
+                .authorizeRequests().antMatchers("/oauth/**", "/actuator/health", "/client/login", "/client/logout").permitAll()
                 // 匹配条件1的 并且不再条件2通过范围内的其他url全部需要验证登录
                 .and().authorizeRequests().anyRequest().authenticated()
                 // 启用登录验证
