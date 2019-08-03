@@ -47,7 +47,7 @@ mybatis:
     jdbc-type-for-null: NULL
     map-underscore-to-camel-case: true
     call-setters-on-nulls: true
-  type-aliases-package: com.wwz.frame.entity
+
 
 
 
