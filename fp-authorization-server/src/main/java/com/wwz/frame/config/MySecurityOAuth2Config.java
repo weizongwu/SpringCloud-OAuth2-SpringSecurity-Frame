@@ -3,7 +3,7 @@ package com.wwz.frame.config;
 import com.wwz.frame.exception.MyOAuth2WebResponseExceptionTranslator;
 import com.wwz.frame.filter.ClientDetailsAuthenticationFilter;
 import com.wwz.frame.service.MyClientDetailsService;
-import com.wwz.frame.service.MyUserDetailsService;
+import com.wwz.frame.service.MyUsernameUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +39,7 @@ public class MySecurityOAuth2Config extends AuthorizationServerConfigurerAdapter
     private RedisConnectionFactory connectionFactory;  // redis连接工厂
 
     @Autowired
-    private MyUserDetailsService userDetailsService;  // 自定义用户验证数据
+    private MyUsernameUserDetailsService userDetailsService;  // 自定义用户验证数据
 
     @Autowired
     private MyClientDetailsService clientDetailsService; // 自定义客户端数据

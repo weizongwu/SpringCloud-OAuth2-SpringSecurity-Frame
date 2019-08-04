@@ -27,6 +27,8 @@ public class AuthUser implements Serializable {
     private String password;
     @ApiModelProperty(value = "中文名", name = "chName", required = true)
     private String chName;
+    @ApiModelProperty(value = "手机号码", name = "phone", required = true)
+    private String phone;
     @ApiModelProperty(value = "可用性", name = "valid", required = true)
     private Boolean valid;
     @ApiModelProperty(value = "过期性 true 没过期 false 过期", name = "accountNonExpired", required = true)

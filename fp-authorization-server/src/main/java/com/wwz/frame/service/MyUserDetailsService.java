@@ -24,15 +24,17 @@ import java.util.Set;
  */
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public abstract class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private AuthUserMapper authUserMapper;
+    protected AuthUserMapper authUserMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String var1) throws UsernameNotFoundException {
         // 自定义用户权限数据
-        AuthUser authUser = authUserMapper.selectByUsername(username);
+        AuthUser authUser1 = getUser(var1);
+
+        AuthUser authUser = authUserMapper.selectById(authUser1.getId());
         if (authUser == null) {
             throw new UsernameNotFoundException("用户名不存在");
         }
@@ -64,4 +66,7 @@ public class MyUserDetailsService implements UserDetailsService {
         MyUserDetails userDetails = new MyUserDetails(authUser, grantedAuthorities);
         return userDetails;
     }
+
+
+    protected abstract AuthUser getUser(String var1);
 }

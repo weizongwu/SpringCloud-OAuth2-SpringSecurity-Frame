@@ -199,7 +199,7 @@
                   return o;
            }
        })
-   6.1 优化6的权限判断
+   6、1 优化6的权限判断
    先增加一级获取uri然后判断uri需要什么权限，可以多个并且的权限 等等然后 在经过权限判断器进行拦截判断    
    新建自定义的url权限判断MyFilterInvocationSecurityMetadataSource 实现FilterInvocationSecurityMetadataSource
           private AntPathMatcher antPathMatcher = new AntPathMatcher(); // 模糊匹配 如何 auth/**   auth/auth
@@ -259,6 +259,30 @@
     1.生成带用户名的code 存入redis 设置过期时间
     2.生成token前对比验证码。
     
-        
-         
-       
+   8、其他方式实现用户名密码登录以及手机号码登录
+    手机验证码登录 
+   新建MyAuthenticationToken 自定义AbstractAuthenticationToken
+   
+   新建 MyPhoneAuthenticationToken（手机验证码登录用） 继承 MyAuthenticationToken 
+   
+   新建MyAbstractUserDetailsAuthenticationProvider 抽象类 实现AuthenticationProvider
+   
+   新建 MyPhoneAuthenticationProvider（手机验证码登录 ）继承 MyAbstractUserDetailsAuthenticationProvider ,在这里使用MyPhoneAuthenticationToken，注入参数
+   
+    这里负责手机验证码的校验。在这里设置各种错误信息，（BadCredentialsException 异常未捕捉 后期处理）。
+   
+   修改MyUserDetailsService，改为抽象类，使用模板方法模式： protected abstract AuthUser getUser(String var1); 来获取不同数据来源
+   
+   新建MyUsernameUserDetailsService继承 MyUsernameUserDetailsService 该方法为原来的登录提供数据   
+   
+   新建MyPhoneUserDetailsService 继承MyUsernameUserDetailsService 该方法为新的手机验证码登录提供数据。
+   
+   新建MyLoginAuthSuccessHandler 登录成功处理器，该方法用于验证client信息 并返回token信息。
+   
+   新建MyPhoneLoginAuthenticationFilter 手机验证码登录过滤器，拦截登录的url，进行数据注入到MyPhoneAuthenticationToken。
+   
+   修改 MySecurityOAuth2Config ，因为修改了  MyUserDetailsService 接口，无法为原来的登录方式提供数据，所以改为MyUsernameUserDetailsService来提供数据
+   
+   重点 修改MySecurityConfig 配置，装配 两个数据接口，装配 登录成功处理器  装配配置，以及把MyPhoneLoginAuthenticationFilter加入到过滤链。
+   
+   手机验证码模式登录这里完成，用户名密码登录可以参照该流程自行完成    
