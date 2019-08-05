@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2019-07-30 10:28:31
+Date: 2019-08-05 10:40:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -40,7 +40,7 @@ CREATE TABLE `auth_client_details` (
 -- ----------------------------
 -- Records of auth_client_details
 -- ----------------------------
-INSERT INTO `auth_client_details` VALUES ('1', 'client_name', '$2a$10$NaVQghEKxZHQskPC69eyte3iuwYZsLs/rGfSt0Kgt1QQ/k2esoLxu', 'auth,api', 'auth,api', 'password,authorization_code,refresh_token,client_credentials', 'http://192.168.3.14:8001/auth/oauth/token', '', '3600', '36000', null, 'false', null);
+INSERT INTO `auth_client_details` VALUES ('1', 'client_name', '$2a$10$NaVQghEKxZHQskPC69eyte3iuwYZsLs/rGfSt0Kgt1QQ/k2esoLxu', 'auth,manager', 'auth,manager', 'password,authorization_code,refresh_token,client_credentials', 'http://192.168.3.14:8001/auth/oauth/token', '', '3600', '36000', null, 'false', null);
 
 -- ----------------------------
 -- Table structure for `auth_permission`
@@ -50,7 +50,7 @@ CREATE TABLE `auth_permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `permission_name` varchar(50) DEFAULT NULL COMMENT '权限名称',
   `service_prefix` varchar(25) DEFAULT NULL COMMENT '前缀',
-  `method` varchar(10) DEFAULT NULL COMMENT '请求方式 restful 模式 GET获取 POST 新增 PUT更新 DELETE 删除',
+  `method` varchar(10) DEFAULT NULL COMMENT '请求方式 restful 模式 GET查看 POST 新增 PUT更新 DELETE 删除',
   `uri` varchar(50) DEFAULT NULL COMMENT '请求地址  资源',
   `valid` tinyint(4) DEFAULT NULL COMMENT '是否可用1是0否',
   `create_time` date DEFAULT NULL COMMENT '创建时间',
@@ -62,8 +62,8 @@ CREATE TABLE `auth_permission` (
 -- ----------------------------
 -- Records of auth_permission
 -- ----------------------------
-INSERT INTO `auth_permission` VALUES ('1', '查看auth服务用户权限', 'auth', 'GET', 'getAuthUser', '1', '2019-07-07', '2019-07-07', null);
-INSERT INTO `auth_permission` VALUES ('2', '查看auth服务hello权限', 'auth', 'GET', 'hello', '1', '2019-07-07', '2019-07-07', null);
+INSERT INTO `auth_permission` VALUES ('1', '查看auth服务用户权限', 'auth', 'GET', 'auth/getAuthUser', '1', '2019-07-07', '2019-07-07', null);
+INSERT INTO `auth_permission` VALUES ('2', '查看auth服务hello权限', 'auth', 'GET', 'auth/hello', '1', '2019-07-07', '2019-07-07', null);
 INSERT INTO `auth_permission` VALUES ('3', '查看api服务hello权限', 'api', 'GET', 'hello', '1', '2019-07-07', '2019-07-07', null);
 
 -- ----------------------------
@@ -133,8 +133,9 @@ INSERT INTO `auth_role_permission` VALUES ('3', '1', '3', '2019-07-07', '2019-07
 DROP TABLE IF EXISTS `auth_user`;
 CREATE TABLE `auth_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) DEFAULT NULL COMMENT '用户名',
-  `password` varchar(100) DEFAULT NULL COMMENT '密码',
+  `username` varchar(50) NOT NULL COMMENT '用户名',
+  `password` varchar(100) NOT NULL COMMENT '密码',
+  `phone` varchar(11) DEFAULT NULL,
   `ch_name` varchar(50) DEFAULT NULL COMMENT '中文名',
   `valid` tinyint(4) DEFAULT NULL COMMENT '可用性',
   `account_non_expired` tinyint(4) DEFAULT NULL COMMENT '过期性  1没过期0过期',
@@ -145,13 +146,14 @@ CREATE TABLE `auth_user` (
   `description` varchar(255) DEFAULT NULL COMMENT '个人说明',
   `operate_id` int(11) DEFAULT NULL COMMENT '操作用户id',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `un_u` (`username`) USING BTREE
+  UNIQUE KEY `un_u` (`username`) USING BTREE,
+  UNIQUE KEY `un_phone` (`phone`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of auth_user
 -- ----------------------------
-INSERT INTO `auth_user` VALUES ('1', 'username', '$2a$10$NaVQghEKxZHQskPC69eyte3iuwYZsLs/rGfSt0Kgt1QQ/k2esoLxu', '管理员', '1', '1', '1', '1', '2019-07-07', '2019-07-07', null, null);
+INSERT INTO `auth_user` VALUES ('1', 'username', '$2a$10$NaVQghEKxZHQskPC69eyte3iuwYZsLs/rGfSt0Kgt1QQ/k2esoLxu', '15000000000', '管理员', '1', '1', '1', '1', '2019-07-07', '2019-07-07', null, null);
 
 -- ----------------------------
 -- Table structure for `auth_user_role`

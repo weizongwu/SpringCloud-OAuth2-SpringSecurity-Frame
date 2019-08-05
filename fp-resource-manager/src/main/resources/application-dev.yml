@@ -14,4 +14,11 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-
+#swagger 配置
+swagger:
+  is:
+    enable: true #是否开启swagger
+  auth:
+    server: http://192.168.3.14:8001/auth/oauth/token   #验证token请求地址：ip+网关+服务名称+请求地址
+  service:
+    name: manager

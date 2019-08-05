@@ -59,9 +59,9 @@ public class MySecurityResourceServerConfig extends ResourceServerConfigurerAdap
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 另外，如果不设置，那么在通过浏览器访问被保护的任何资源时，每次是不同的SessionID，并且将每次请求的历史都记录在OAuth2Authentication的details的中
                 .and()
-                .authorizeRequests().antMatchers("/actuator/health").permitAll().anyRequest().authenticated()  // httpSecurity 放过健康检查，其他都需要验证  设置了.anyRequest().authenticated()才回进入自定义的权限判断
+                .authorizeRequests().antMatchers("/actuator/health","/v2/api-docs/**", "/swagger-resources/**", "/swagger-ui.html/").permitAll().anyRequest().authenticated()  // httpSecurity 放过健康检查，其他都需要验证  设置了.anyRequest().authenticated()才回进入自定义的权限判断
                 .and()
-                .requestMatchers().antMatchers("/auth/**") // .requestMatchers().antMatchers(...) OAuth2设置对资源的保护如果是用 /**的话 会把上面的也拦截掉
+                .requestMatchers().antMatchers("/auth/**", "/authResource/**", "/authUser/**") // .requestMatchers().antMatchers(...) OAuth2设置对资源的保护如果是用 /**的话 会把上面的也拦截掉
                 .and()
                 .authorizeRequests()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {       // 重写做权限判断

@@ -1,5 +1,20 @@
 2019.07.02
 
+环境：SpringBoot 2.1.0.RELEASE jdk1.8   SpringCloud Greenwich.SR1  consul服务发现与注册  redis
+
+目前完成：
+
+     1、请求前客户端信息完整性校验 
+     2、自定义异常返回
+     3、无权处理器  
+     4、token失效处理器
+     5、自定义token返回信息
+     6、根据请求URI拦截权限判断
+     7、登录登出自定义
+     8、用户名密码登录以及手机号码登录
+     9、 swagger 集成 OAuth2 
+     
+
 最近在使用SpringCloud 开发权限管理项目，于是设计了一个SpringSecurity OAuth2的统一安全认证。
 1、环境   SpringBoot 2.1.0.RELEASE jdk1.8   SpringCloud Greenwich.SR1  consul服务发现与注册  
 2、项目划分
@@ -269,7 +284,7 @@
    
    新建 MyPhoneAuthenticationProvider（手机验证码登录 ）继承 MyAbstractUserDetailsAuthenticationProvider ,在这里使用MyPhoneAuthenticationToken，注入参数
    
-    这里负责手机验证码的校验。在这里设置各种错误信息，（BadCredentialsException 异常未捕捉 后期处理）。
+    这里负责手机验证码的校验。在这里设置各种错误信息 (在MyLoginAuthFailureHandler 登录失败处理器中处理异常返回信息)
    
    修改MyUserDetailsService，改为抽象类，使用模板方法模式： protected abstract AuthUser getUser(String var1); 来获取不同数据来源
    
@@ -285,4 +300,21 @@
    
    重点 修改MySecurityConfig 配置，装配 两个数据接口，装配 登录成功处理器  装配配置，以及把MyPhoneLoginAuthenticationFilter加入到过滤链。
    
-   手机验证码模式登录这里完成，用户名密码登录可以参照该流程自行完成    
+   手机验证码模式登录这里完成，用户名密码登录可以参照该流程自行完成
+ 
+   8、1 优化自定义异常返回格式， 增加登录失败处理器，返回失败异常 
+   
+   9、 swagger 集成 OAuth2 
+   
+       pom.xml增加  swagger依赖 
+       application中增加swagger的配置
+       增加配置文件 SwaggerConfig  
+       有两种模式  注解掉的是提交增加一个Authorization 提交token框的方式
+       方式二：增加token登录框采用登录的方式进行token校验。 
+       Swagger 配置登录相关  application配置 登录url
+       MySecurityResourceServerConfig 放行 
+      
+       测试地址：http://192.168.3.14:8001/manager/swagger-ui.html#/
+      
+        
+     
