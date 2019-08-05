@@ -3,7 +3,13 @@ package com.wwz.frame.service;
 import com.wwz.frame.entity.AuthUser;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+/**  
+* @Description 为默认的token登录方式提供数据
+* @Author wwz
+* @Date 2019/08/05 
+* @Param   
+* @Return   
+*/ 
 @Service
 public class MyUsernameUserDetailsService extends MyUserDetailsService {
     @Override

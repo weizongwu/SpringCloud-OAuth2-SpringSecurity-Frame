@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -43,6 +42,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     // 装配登录成功处理器 生成token用 通用， 下方配置的时候不能用new 的形式加入 不然里面的接口注入会报空指针
     @Autowired
     private MyLoginAuthSuccessHandler myLoginAuthSuccessHandler;
+
+    @Autowired
+    private MyLoginAuthFailureHandler myLoginAuthFailureHandler;   // 配置登录失败处理器
 
     // 加密方式
     @Bean
@@ -112,7 +114,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
             e.printStackTrace();
         }
         filter.setAuthenticationSuccessHandler(myLoginAuthSuccessHandler);
-        filter.setAuthenticationFailureHandler(new SimpleUrlAuthenticationFailureHandler("/login?error"));
+        filter.setAuthenticationFailureHandler(myLoginAuthFailureHandler);
         return filter;
     }
 }

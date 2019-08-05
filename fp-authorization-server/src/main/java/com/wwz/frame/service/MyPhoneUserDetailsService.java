@@ -3,7 +3,13 @@ package com.wwz.frame.service;
 import com.wwz.frame.entity.AuthUser;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+/**  
+* @Description 为手机验证码登录提供数据
+* @Author wwz
+* @Date 2019/08/05 
+* @Param   
+* @Return   
+*/ 
 @Service
 public class MyPhoneUserDetailsService extends MyUserDetailsService {
     @Override
