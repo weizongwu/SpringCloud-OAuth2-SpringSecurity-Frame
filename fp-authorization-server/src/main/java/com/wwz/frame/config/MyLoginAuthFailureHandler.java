@@ -26,7 +26,7 @@ public class MyLoginAuthFailureHandler implements AuthenticationFailureHandler {
         responseVo.setCode(401);
         responseVo.setMessage(exception.getMessage());
         responseVo.setData("path:"+request.getRequestURI());
-        response.setStatus(401);
+        response.setStatus(200);
         HttpUtilsResultVO.writerError(responseVo, response);
     }
 }

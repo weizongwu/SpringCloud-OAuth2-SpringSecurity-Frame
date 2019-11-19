@@ -64,10 +64,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(getPhoneLoginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 // 匹配oauth相关，匹配健康，匹配默认登录登出 在httpSecurity处理，，其他到ResourceServerConfigurerAdapter OAuth2处理  1
-                .requestMatchers().antMatchers("/oauth/**", "/actuator/health", "/client/**","/token/phoneLogin")
+                .requestMatchers().antMatchers("/oauth/**", "/actuator/health", "/client/login","/client/getCode","/token/phoneLogin")
                 .and()
                 // 匹配的全部无条件通过 permitAll 2
-                .authorizeRequests().antMatchers("/oauth/**", "/actuator/health", "/client/**","/token/phoneLogin").permitAll()
+                .authorizeRequests().antMatchers("/oauth/**", "/actuator/health", "/client/login","/client/getCode","/token/phoneLogin").permitAll()
                 // 匹配条件1的 并且不再条件2通过范围内的其他url全部需要验证登录
                 .and().authorizeRequests().anyRequest().authenticated()
                 // 启用登录验证

@@ -12,7 +12,7 @@ spring:
     name: SpringCloud-consul-authorization-manager
   #redis服务器地址配置
   redis:
-    host: 127.0.0.1
+    host: 192.168.1.130
     port: 6379
 #swagger 配置
 swagger:
