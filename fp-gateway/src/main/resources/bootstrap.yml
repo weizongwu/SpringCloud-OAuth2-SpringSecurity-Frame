@@ -12,5 +12,6 @@ spring:
         register: true
         prefer-ip-address: true #这个必须配 表示使用ip来获取注册，有些网络会出现用主机名来获取注册的问题
         tags: version=1.0
+        health-check-critical-timeout: 60s  #多少秒健康检查不过，从consul中删除服务
         instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}
         health-check-url: http://${spring.cloud.client.ip-address}:${server.port}/actuator/health #设置健康检查路径

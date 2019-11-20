@@ -14,6 +14,7 @@
         <module>fp-resource-manager</module>
         <module>fp-authorization-server</module>
         <module>fp-log</module>
+        <module>fp-resource-feign</module>
     </modules>
 
     <parent>

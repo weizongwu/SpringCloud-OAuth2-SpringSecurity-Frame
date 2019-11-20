@@ -1,0 +1,6 @@
+#指定为 调用application-dev.xml
+spring:
+  profiles:
+    active: dev
+
+
