@@ -19,7 +19,7 @@ public class AuthController {
     }
 
     @GetMapping("/hello")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String hello(Principal principal) {
         return principal.getName() + " has hello Permission";
     }

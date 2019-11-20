@@ -13,5 +13,6 @@ spring:
         prefer-ip-address: true #这个必须配
         tags: version=1.0
         instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}
-        healthCheckInterval: 15s
+        health-check-critical-timeout: 60s  #多少秒健康检查不过，从consul中删除服务
+        healthCheckInterval: 15s  #检查间隔
         health-check-url: http://${spring.cloud.client.ip-address}:${server.port}/actuator/health

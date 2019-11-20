@@ -13,6 +13,7 @@
      7、登录登出自定义
      8、用户名密码登录以及手机号码登录
      9、 swagger 集成 OAuth2 
+     10、FeignClient 权限处理
      
 
 最近在使用SpringCloud 开发权限管理项目，于是设计了一个SpringSecurity OAuth2的统一安全认证。
@@ -315,6 +316,11 @@
        MySecurityResourceServerConfig 放行 
       
        测试地址：http://192.168.3.14:8001/manager/swagger-ui.html#/
-      
+       
+   10、FeignClient 权限处理
+        
+        新建一个fp-resource-feign服务
+        pom.xml增加FeignClient的依赖
+        FeignClient 有一个RequestInterceptor接口，对该接口做一些简单的实现，FeignConfig，对请求增加token信息实现授权调用服务接口。
         
      
