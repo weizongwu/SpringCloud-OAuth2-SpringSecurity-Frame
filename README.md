@@ -317,10 +317,10 @@
       
        测试地址：http://192.168.3.14:8001/manager/swagger-ui.html#/
        
-   10、FeignClient 权限处理
+   10、Feign 权限处理
         
         新建一个fp-resource-feign服务
-        pom.xml增加FeignClient的依赖
-        FeignClient 有一个RequestInterceptor接口，对该接口做一些简单的实现，FeignConfig，对请求增加token信息实现授权调用服务接口。
+        pom.xml增加Feign的依赖
+        Feign 有一个RequestInterceptor接口，对该接口做一些简单的实现，FeignConfig，对请求增加token信息实现授权调用服务接口。
         
      
