@@ -13,7 +13,7 @@
      7、登录登出自定义
      8、用户名密码登录以及手机号码登录
      9、 swagger 集成 OAuth2 
-     10、FeignClient 权限处理
+     10、Feign 权限处理
      
 
 最近在使用SpringCloud 开发权限管理项目，于是设计了一个SpringSecurity OAuth2的统一安全认证。
